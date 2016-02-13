@@ -3,6 +3,9 @@
 
 - include: ../check_devices.yml
 
+- name: debug ansible_devices
+  debug: var=ansible_devices
+
 # NOTE (leseb): the prepare process must be parallelized somehow...
 # if you have 64 disks with 4TB each, this will take a while
 # since Ansible will sequential process the loop
@@ -20,6 +23,25 @@
     item.value.partitions|count == 0 and
     journal_collocation and
     osd_auto_discovery
+
+- name: debug combined_parted_results.results
+  debug: var=combined_parted_results.results
+
+- name: debug combined_ispartition_results.results
+  debug: var=combined_ispartition_results.results
+
+- name: debug journal_collocation
+  debug: var=journal_collocation
+
+- name: debug osd_auto_discovery
+  debug: var=osd_auto_discovery
+
+- name: detailed debug
+  debug: msg="item_0:{{ item.0 }} item_1:{{ item.1 }} item_2:{{ item.2 }}"
+  with_together:
+    - combined_parted_results.results
+    - combined_ispartition_results.results
+    - devices
 
 - name: manually prepare osd disk(s)
   command: "ceph-disk prepare {{ item.2 }}"
