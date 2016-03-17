@@ -1,0 +1,71 @@
+---
+
+- hosts: localhost
+  connection: local
+  vars:
+    ceph_conf_overrides:
+      global:
+        foo: 1234
+        tata: 1567
+      mons:
+        bar: 5678
+        pouet: 153
+
+  tasks:
+
+#    SOLUTION 1: JSON PARSING
+    - shell: curl -sL http://127.0.0.1:4001/v2/keys/ceph\?recursive\=true
+      register: etcd
+
+    - set_fact: etcd_content="{{ etcd.stdout | from_json }}"
+
+    - debug: var=etcd_content
+
+    - debug: var={{ item }}
+      with_dict: etcd_content
+
+    - command: echo '{{ item.value['key'] }}'
+      with_dict: etcd_content.node.nodes
+
+
+#    SOLUTION 2: USE LOOKUP MODULE
+#    - shell: etcdctl ls /ceph/{{ item }} --recursive -p | grep -v '/$'
+#      with_items: [ 'global', 'mon', 'osd' ]
+#      register: etcd_keys
+#
+#    - debug: var=etcd_keys
+#
+#    - debug: msg="{{ lookup('etcd', '{{ item }}') }}"
+#      with_items: etcd_keys.stdout_lines
+#      register: etcd_keys_content
+#
+#    - debug: var=etcd_keys_content
+#
+#    - debug: var="{{ item['item'] }}"
+#      with_items: "{{ etcd_keys_content.results }}"
+##
+
+#    SOLUTION 3: PARSE SHELL OUTPUT
+#    - shell: |
+#        etcdctl ls --recursive -p | grep -v '/$' | xargs -n 1 -I% bash -c "echo -n '% '; etcdctl get %;"
+#      register: etcd
+#
+#    - debug: var=etcd
+#
+#    - debug: var={{ item }}
+#      with_dict: etcd
+#
+#    - debug: var=ceph_conf_overrides
+#
+#    - name: generate ceph configuration file
+#      action: config_template
+#      args:
+#        src: ceph.conf.etcd.j2
+#        dest: /tmp/ceph.conf
+#        owner: leseb
+#        group: staff
+#        mode: 0644
+#        config_overrides: "{{ ceph_conf_overrides }}"
+#        config_type: ini
+#
+#        #config_overrides: "{{ etcd.stdout_lines }}"
