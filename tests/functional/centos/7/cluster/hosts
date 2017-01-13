@@ -5,6 +5,7 @@ mon2 monitor_address=192.168.1.12
 
 [osds]
 osd0
+osd1
 
 [mdss]
 mds0
