@@ -37,10 +37,7 @@
   - name: restart ceph osds daemon(s)
     command: /tmp/restart_osd_daemon.sh
     listen: "restart ceph osds"
-    when:
-      - handler_health_osd_check
-  when:
-    - osd_group_name in group_names
+    when: handler_health_osd_check
 
 - name: restart ceph mdss
   service:
