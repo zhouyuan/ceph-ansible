@@ -358,7 +358,6 @@
     service:
       name: ceph-mon@{{ ansible_hostname }}
       state: stopped
-      enabled: no
     when: ansible_service_mgr == 'systemd'
 
   - name: stop ceph mons
