@@ -1,0 +1,7 @@
+#jinja2: trim_blocks: "true", lstrip_blocks: "true"
+# {{ ansible_managed }}
+
+Explanation: Prefer Upstream Ceph packages
+Package: *
+Pin: origin *.ceph.com 
+Pin-Priority: 999

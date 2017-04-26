@@ -18,6 +18,15 @@
   changed_when: false
   when: ceph_stable
 
+- name: set apt pinning for ceph repo
+  template:
+    src: "{{ role_path }}/templates/ceph.pref.j2"
+    dest: /etc/apt/preferences.d/ceph.pref
+    owner: root
+    group: root
+    mode: 0644
+  when: ceph_stable or ceph_dev
+
 - name: fetch ceph development repository sources list file
   uri:
     url: https://shaman.ceph.com/api/repos/ceph/{{ ceph_dev_branch }}/{{ ceph_dev_sha1 }}/{{ ansible_distribution | lower }}/{{ ansible_lsb.codename }}/repo
