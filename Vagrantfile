@@ -202,6 +202,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       mgr.vm.provider :libvirt do |lv|
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
 
       # Parallels
@@ -237,6 +238,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       client.vm.provider :libvirt do |lv|
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
 
       # Parallels
@@ -273,6 +275,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       rgw.vm.provider :libvirt do |lv|
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
 
       # Parallels
@@ -309,6 +312,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       nfs.vm.provider :libvirt do |lv|
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
 
       # Parallels
@@ -344,6 +348,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       mds.vm.provider :libvirt do |lv|
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
       # Parallels
       mds.vm.provider "parallels" do |prl|
@@ -378,6 +383,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       rbd_mirror.vm.provider :libvirt do |lv|
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
       # Parallels
       rbd_mirror.vm.provider "parallels" do |prl|
@@ -412,6 +418,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       iscsi_gw.vm.provider :libvirt do |lv|
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
       # Parallels
       iscsi_gw.vm.provider "parallels" do |prl|
@@ -446,6 +453,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       mon.vm.provider :libvirt do |lv|
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
 
       # Parallels
@@ -509,6 +517,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
         lv.memory = MEMORY
         lv.random_hostname = true
+        lv.nic_model_type = "e1000"
       end
 
       # Parallels
