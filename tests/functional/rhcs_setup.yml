@@ -74,6 +74,9 @@
     - name: enable the rhel-7-extras-nightly repo
       command: "yum-config-manager --enable rhel-7-extras-nightly"
 
+    - name: enable the rhel-7-optional-nightly repo
+      command: "yum-config-manager --enable rhel-7-optional-nightly"
+
     - name: set MTU on eth0
       command: "ifconfig eth0 mtu 1400 up"
 
