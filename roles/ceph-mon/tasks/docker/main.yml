@@ -29,8 +29,6 @@
     - ansible_os_family == 'Debian'
     - ntp_service_enabled
 
-- include: "{{ playbook_dir }}/roles/ceph-common/tasks/docker/fetch_image.yml"
-
 - include: dirs_permissions.yml
 
 # let the first mon create configs and keyrings
