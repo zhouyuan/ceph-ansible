@@ -42,7 +42,8 @@ fi
   {% else -%}
   --device=/dev/${1}2 \
   {% endif -%}
-  --device=/dev/disk/by-partuuid/$(python -c "import uuid; f = open('/etc/machine-id', 'r').read(); print uuid.uuid5(uuid.NAMESPACE_DNS, f.strip() + '/dev/$1')") ${DEVICES} \
+  --device=/dev/disk/by-partuuid/$(blkid -o value -s PARTUUID /dev/${1}1) \
+  --device=/dev/disk/by-partuuid/$(blkid -o value -s PARTUUID /dev/${1}2) \
   -e CEPH_DAEMON=OSD_CEPH_DISK_ACTIVATE \
   -e OSD_DEVICE=/dev/${1} \
   {{ ceph_osd_docker_extra_env }} \
