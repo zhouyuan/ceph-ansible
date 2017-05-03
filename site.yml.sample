@@ -99,7 +99,7 @@
   roles:
   - ceph-iscsi-gw
 
-- hosts: mgrs
+- hosts: {{ mgr_group_name|default(mgrs) }}
   gather_facts: false
   become: True
   roles:
