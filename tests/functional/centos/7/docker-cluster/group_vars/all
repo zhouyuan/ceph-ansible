@@ -8,7 +8,7 @@ mon_containerized_deployment: True
 osd_containerized_deployment: True
 mds_containerized_deployment: True
 rgw_containerized_deployment: True
-cluster: test
+cluster: ceph
 ceph_mon_docker_interface: eth1
 ceph_mon_docker_subnet: "{{ public_network }}"
 journal_size: 100
