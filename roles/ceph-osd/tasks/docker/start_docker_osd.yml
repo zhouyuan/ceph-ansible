@@ -41,6 +41,8 @@
     - item.1.get("rc", 0) != 0
     - ceph_osd_docker_prepare_env is defined
     - not osd_containerized_deployment_with_kv
+  retries: 3
+  delay: 2
 
 - name: prepare ceph osd disk with kv_store
   shell: |
