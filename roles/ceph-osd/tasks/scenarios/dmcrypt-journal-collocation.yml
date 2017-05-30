@@ -19,7 +19,7 @@
 
 - name: manually prepare dmcrypt osd disk(s) with collocated osd data and journal
   command: ceph-disk prepare --dmcrypt --cluster "{{ cluster }}" "{{ item }}"
-  with_dict: "{{ legacy_devices }}"
+  with_items: "{{ legacy_devices }}"
   when:
     - legacy_devices is defined
     - dmcrypt_journal_collocation
