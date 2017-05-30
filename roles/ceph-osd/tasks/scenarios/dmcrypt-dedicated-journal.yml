@@ -10,7 +10,7 @@
 # NOTE (alahouze): if the device is a partition, the parted command below has
 # failed, this is why we check if the device is a partition too.
 - name: prepare dmcrypt osd disk(s) with a dedicated journal device
-  command: "ceph-disk prepare --dmcrypt --cluster {{ cluster }} {{ item.2 }} {{ item.3 }}"
+  command: "ceph-disk prepare --dmcrypt --cluster {{ cluster }} {{ item.0 }} {{ item.1 }}"
   with_together:
     - "{{ legacy_devices }}"
     - "{{ journal_devices }}"
