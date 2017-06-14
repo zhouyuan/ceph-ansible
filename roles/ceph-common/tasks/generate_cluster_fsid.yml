@@ -22,8 +22,10 @@
   become: false
   always_run: true
   when: generate_fsid
+  tags: refact_template
 
 - name: set fsid fact when generate_fsid = true
   set_fact:
     fsid: "{{ cluster_uuid.stdout }}"
   when: generate_fsid
+  tags: refact_template
