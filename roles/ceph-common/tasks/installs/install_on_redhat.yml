@@ -102,6 +102,7 @@
     state: "{{ (upgrade_ceph_packages|bool) | ternary('latest','present') }}"
   when:
     - client_group_name in group_names
+      or nfs_group_name in group_names
 
 - name: install ceph-test
   package:

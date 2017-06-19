@@ -384,6 +384,9 @@ containerized_deployment_with_kv: false
 containerized_deployment: false
 mon_containerized_default_ceph_conf_with_kv: false
 
+###############
+# NFS-GANESHA #
+###############
 # Confiure the type of NFS gatway access.  At least one must be enabled for an
 # NFS role to be useful
 #
@@ -391,6 +394,10 @@ mon_containerized_default_ceph_conf_with_kv: false
 nfs_file_gw: true
 # Set this to true to enable Object access via NFS. Requires an RGW role.
 nfs_obj_gw: false
+
+# Set this to choose the version of ceph libraries used in the nfs-ganesha packages from shaman
+# flavors so far include: ceph_master, ceph_jewel, ceph_kraken
+nfs_ganesha_flavor: "ceph_master"
 
 # this is only here for usage with the rolling_update.yml playbook
 # do not ever change this here

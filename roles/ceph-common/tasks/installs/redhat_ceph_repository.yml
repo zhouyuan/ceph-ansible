@@ -31,6 +31,23 @@
     backup: yes
   when: ceph_dev
 
+- name: fetch nfs-ganesha development repo file
+  uri:
+    url: https://shaman.ceph.com/api/repos/nfs-ganesha/next/latest/{{ ansible_distribution | lower }}/{{ ansible_distribution_major_version }}/flavors/{{ nfs_ganesha_flavor }}/repo
+    return_content: yes
+  register: nfs_ganesha_dev_yum_repo
+  when:
+    - ceph_dev
+
+- name: add nfs-ganesha development repository
+  copy:
+    content: "{{ nfs_ganesha_dev_yum_repo.content }}"
+    dest: /etc/yum.repos.d/nfs-ganesha-dev.repo
+    owner: root
+    group: root
+    backup: yes
+  when: ceph_dev
+
 - name: add custom repo
   get_url:
     url: "{{ ceph_custom_repo }}"
