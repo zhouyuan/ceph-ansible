@@ -19,6 +19,7 @@
   uri:
     url: https://shaman.ceph.com/api/repos/ceph/{{ ceph_dev_branch }}/{{ ceph_dev_sha1 }}/{{ ansible_distribution | lower }}/{{ ansible_distribution_major_version }}/repo
     return_content: yes
+    validate_certs: no
   register: ceph_dev_yum_repo
   when: ceph_dev
 

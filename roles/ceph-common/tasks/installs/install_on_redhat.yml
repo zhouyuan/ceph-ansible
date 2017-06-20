@@ -104,9 +104,10 @@
     - client_group_name in group_names
 
 - name: install ceph-test
-  package:
+  yum:
     name: ceph-test
     state: "{{ (upgrade_ceph_packages|bool) | ternary('latest','present') }}"
+    validate_certs: no
   when: ceph_test
 
 - name: install rados gateway
