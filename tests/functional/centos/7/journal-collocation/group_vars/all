@@ -1,6 +1,6 @@
 ---
 
-ceph_stable: True
+ceph_stable: False
 cluster: test
 public_network: "192.168.3.0/24"
 cluster_network: "192.168.4.0/24"
@@ -12,3 +12,17 @@ journal_collocation: True
 os_tuning_params:
   - { name: kernel.pid_max, value: 4194303 }
   - { name: fs.file-max, value: 26234859 }
+
+ceph_conf_overrides:
+  global:
+    debug ms: 1
+    debug rgw: 20
+    osd_pool_default_pg_num: 8
+    osd_pool_default_size: 1
+ceph_dev: true
+ceph_dev_branch: master
+ceph_dev_key: https://download.ceph.com/keys/autobuild.asc
+ceph_origin: upstream
+ceph_test: true
+#journal_collocation: true
+#journal_size: 1024
