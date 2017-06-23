@@ -112,6 +112,7 @@
     - /var/lib/ceph/bootstrap-osd/{{ cluster }}.keyring
     - /var/lib/ceph/bootstrap-rgw/{{ cluster }}.keyring
     - /var/lib/ceph/bootstrap-mds/{{ cluster }}.keyring
+    - /var/lib/ceph/bootstrap-rbd-mirror/{{ cluster }}.keyring
   when:
     - cephx
     - "{{ inventory_hostname == groups[mon_group_name] | last }}"

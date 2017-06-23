@@ -7,4 +7,5 @@
     - ceph-osd
     - ceph-mds
     - ceph-rgw
+    - ceph-rbd-mirror
     - ceph-fetch-keys
