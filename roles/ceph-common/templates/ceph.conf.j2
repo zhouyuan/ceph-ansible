@@ -8,27 +8,19 @@ auth service required = none
 auth client required = none
 auth supported = none
 {% endif %}
-{% if ip_version == 'ipv6'  %}
-ms bind ipv6 = true
-{% endif %}
-{% if not containerized_deployment_with_kv and not containerized_deployment %}
-fsid = {{ fsid }}
-{% endif %}
+{% if ip_version == 'ipv6' %}ms bind ipv6 = true{% endif %}
+{% if not containerized_deployment_with_kv and not containerized_deployment %}fsid = {{ fsid }}{% endif %}
 max open files = {{ max_open_files }}
-{% if common_single_host_mode is defined and common_single_host_mode %}
-osd crush chooseleaf type = 0
-{% endif %}
-{# NOTE (leseb): the blank lines in-between are needed otherwise we won't get any line break #}
-{% if groups[mon_group_name] is defined %}
+{% if common_single_host_mode is defined and common_single_host_mode %}osd crush chooseleaf type = 0{% endif %}
+
 mon initial members = {% for host in groups[mon_group_name] %}
-      {% if hostvars[host]['ansible_fqdn'] is defined and mon_use_fqdn -%}
-        {{ hostvars[host]['ansible_fqdn'] }}
-      {%- elif hostvars[host]['ansible_hostname'] is defined -%}
-        {{ hostvars[host]['ansible_hostname'] }}
-      {%- endif %}
-      {%- if not loop.last %},{% endif %}
-    {% endfor %}
-{% endif %}
+  {% if hostvars[host]['ansible_fqdn'] is defined and mon_use_fqdn -%}
+    {{ hostvars[host]['ansible_fqdn'] }}
+  {%- elif hostvars[host]['ansible_hostname'] is defined -%}
+    {{ hostvars[host]['ansible_hostname'] }}
+  {%- endif %}
+  {%- if not loop.last %},{% endif %}
+{% endfor %}
 
 {% if not containerized_deployment and not containerized_deployment_with_kv -%}
 mon host = {% for host in groups[mon_group_name] -%}
@@ -56,7 +48,6 @@ mon host = {% for host in groups[mon_group_name] -%}
 {%- endif %}
 
 {% if containerized_deployment %}
-fsid = {{ fsid }}
 mon host = {% for host in groups[mon_group_name] -%}
     {% if monitor_address_block | length > 0 %}
       {% if ip_version == 'ipv4' -%}
@@ -82,18 +73,10 @@ mon host = {% for host in groups[mon_group_name] -%}
   {%- endfor %}
 {% endif %}
 
-{% if public_network is defined %}
-public network = {{ public_network }}
-{% endif %}
-{% if cluster_network is defined %}
-cluster network = {{ cluster_network }}
-{% endif %}
-{% if rgw_override_bucket_index_max_shards is defined %}
-rgw override bucket index max shards = {{ rgw_override_bucket_index_max_shards }}
-{% endif %}
-{% if rgw_bucket_default_quota_max_objects is defined %}
-rgw bucket default quota max objects = {{ rgw_bucket_default_quota_max_objects }}
-{% endif %}
+{% if public_network is defined %}public network = {{ public_network }}{% endif %}
+{% if cluster_network is defined %}cluster network = {{ cluster_network }}{% endif %}
+{% if rgw_override_bucket_index_max_shards is defined %}rgw override bucket index max shards = {{ rgw_override_bucket_index_max_shards }}{% endif %}
+{% if rgw_bucket_default_quota_max_objects is defined %}rgw bucket default quota max objects = {{ rgw_bucket_default_quota_max_objects }}{% endif %}
 
 [client.libvirt]
 admin socket = {{ rbd_client_admin_socket_path }}/$cluster-$type.$id.$pid.$cctid.asok # must be writable by QEMU and allowed by SELinux or AppArmor
@@ -112,24 +95,22 @@ filestore xattr use omap = true
 {% endif %}
 
 {% if groups[mds_group_name] is defined %}
-{% for host in groups[mds_group_name] %}
-{% if hostvars[host]['ansible_fqdn'] is defined and mds_use_fqdn %}
+  {% for host in groups[mds_group_name] %}
+    {% if hostvars[host]['ansible_fqdn'] is defined and mds_use_fqdn %}
 [mds.{{ hostvars[host]['ansible_fqdn'] }}]
 host = {{ hostvars[host]['ansible_fqdn'] }}
-{% elif hostvars[host]['ansible_hostname'] is defined %}
+    {% elif hostvars[host]['ansible_hostname'] is defined %}
 [mds.{{ hostvars[host]['ansible_hostname'] }}]
 host = {{ hostvars[host]['ansible_hostname'] }}
-{% endif %}
-{% endfor %}
+    {% endif %}
+  {% endfor %}
 {% endif %}
 
 {% if groups[rgw_group_name] is defined %}
-{% for host in groups[rgw_group_name] %}
-{% if hostvars[host]['ansible_hostname'] is defined %}
+  {% for host in groups[rgw_group_name] %}
+    {% if hostvars[host]['ansible_hostname'] is defined %}
 [client.rgw.{{ hostvars[host]['ansible_hostname'] }}]
-{% if radosgw_dns_name is defined %}
-rgw dns name = {{ radosgw_dns_name }}
-{% endif %}
+      {% if radosgw_dns_name is defined %}rgw dns name = {{ radosgw_dns_name }}{% endif %}
 host = {{ hostvars[host]['ansible_hostname'] }}
 keyring = /var/lib/ceph/radosgw/{{ cluster }}-rgw.{{ hostvars[host]['ansible_hostname'] }}/keyring
 rgw socket path = /tmp/radosgw-{{ hostvars[host]['ansible_hostname'] }}.sock
@@ -137,47 +118,45 @@ log file = /var/log/ceph/{{ cluster }}-rgw-{{ hostvars[host]['ansible_hostname']
 rgw data = /var/lib/ceph/radosgw/{{ cluster }}-rgw.{{ hostvars[host]['ansible_hostname'] }}
 rgw frontends = civetweb {{ radosgw_civetweb_options }}
 rgw resolve cname = {{ radosgw_resolve_cname | bool }}
-{% if radosgw_keystone %}
+      {% if radosgw_keystone %}
 rgw keystone url = {{ radosgw_keystone_url }}
 rgw keystone api version = {{ radosgw_keystone_api_version }}
-{% if radosgw_keystone_auth_method == 'admin_token' %}
+        {% if radosgw_keystone_auth_method == 'admin_token' %}
 rgw keystone admin token = {{ radosgw_keystone_admin_token }}
-{% elif radosgw_keystone_auth_method == 'auth_token' %}
+        {% elif radosgw_keystone_auth_method == 'auth_token' %}
 rgw keystone admin user = {{ radosgw_keystone_admin_user }}
 rgw keystone admin password = {{ radosgw_keystone_admin_password }}
 rgw keystone admin tenant = {{ radosgw_keystone_admin_tenant }}
 rgw keystone admin domain = {{ radosgw_keystone_admin_domain }}
-{% endif %}
+        {% endif %}
 rgw keystone accepted roles = {{ radosgw_keystone_accepted_roles }}
 rgw keystone token cache size = {{ radosgw_keystone_token_cache_size }}
 rgw keystone revocation interval = {{ radosgw_keystone_revocation_internal }}
 rgw s3 auth use keystone = {{ radosgw_s3_auth_use_keystone }}
-{% if radosgw_keystone_ssl | bool %}
-nss db path = {{ radosgw_nss_db_path }}
-{% endif %}
-{% endif %}
-{% if radosgw_usage_log | bool %}
+        {% if radosgw_keystone_ssl | bool %}nss db path = {{ radosgw_nss_db_path }}{% endif %}
+      {% endif %}
+      {% if radosgw_usage_log | bool %}
 rgw enable usage log = true
 rgw usage log tick interval = {{ radosgw_usage_log_tick_interval }}
 rgw usage log flush threshold = {{ radosgw_usage_log_flush_threshold }}
 rgw usage max shards = {{ radosgw_usage_max_shards }}
 rgw usage max user shards = {{ radosgw_usage_max_user_shards }}
-{% endif %}
-{% if radosgw_static_website | bool %}
+      {% endif %}
+      {% if radosgw_static_website | bool %}
 rgw enable static website = {{ radosgw_static_website }}
 rgw dns s3website name = {{ radosgw_dns_s3website_name }}
-{% endif %}
-{% endif %}
-{% endfor %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
 {% endif %}
 
 {% if groups[restapi_group_name] is defined %}
 [client.restapi]
-{% if restapi_interface != "interface" %}
-{% include 'client_restapi_interface.j2' %}
-{% else %}
-{% include 'client_restapi_address.j2' %}
-{% endif %}
+  {% if restapi_interface != "interface" %}
+    {% include 'client_restapi_interface.j2' %}
+  {% else %}
+    {% include 'client_restapi_address.j2' %}
+  {% endif %}
 keyring = /var/lib/ceph/restapi/ceph-restapi/keyring
 log file = /var/log/ceph/ceph-restapi.log
 {% endif %}
