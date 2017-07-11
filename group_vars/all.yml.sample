@@ -402,6 +402,12 @@ dummy:
 # Set this to true to enable Object access via NFS. Requires an RGW role.
 #nfs_obj_gw: false
 
+# If you are deploying a standalone client node for an external ceph cluster set this to true.
+# Do not forget to :
+# - set fsid variable with the fsid of your cluster.
+# - set generate_fsid variable to false.
+#client_node_external_cluster: false
+
 # this is only here for usage with the rolling_update.yml playbook
 # do not ever change this here
 #rolling_update: false

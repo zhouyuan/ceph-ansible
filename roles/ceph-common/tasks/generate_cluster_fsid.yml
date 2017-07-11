@@ -7,6 +7,7 @@
   when:
     - generate_fsid
     - ceph_current_fsid.rc != 0
+    - not client_node_external_cluster
 
 - name: reuse cluster fsid when cluster is already running
   local_action: shell echo {{ fsid }} | tee {{ fetch_directory }}/ceph_cluster_uuid.conf
