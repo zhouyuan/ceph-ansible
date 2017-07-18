@@ -366,7 +366,6 @@ dummy:
 #
 #ceph_conf_overrides: {}
 
-
 #############
 # OS TUNING #
 #############

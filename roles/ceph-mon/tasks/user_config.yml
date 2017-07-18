@@ -1,0 +1,41 @@
+---
+- name: check if user(s) key(s) already exist(s)
+  command: "{{ docker_exec_cmd }} ceph --cluster {{ cluster }} auth get {{ item.name }}"
+  changed_when: false
+  failed_when: false
+  register: client_keys_exist
+  with_items: "{{ client_keys }}"
+
+- name: create user(s) key(s)
+  shell: "{{ docker_exec_cmd }} ceph-authtool -C /etc/ceph/{{ cluster }}.{{ item.0.name }}.keyring --name {{ item.0.name }} --add-key {{ item.0.key }} --cap mon \"{{ item.0.mon_cap|default('') }}\" --cap osd \"{{ item.0.osd_cap|default('') }}\" --cap mds \"{{ item.0.mds_cap|default('') }}\""
+  register: created_users_key_tmp
+  with_together:
+    - "{{ client_keys }}"
+    - "{{ client_keys_exist.results }}"
+  when: item.1.rc != 0
+
+- name: add user key(s) to ceph
+  command: "{{ docker_exec_cmd }} ceph --cluster {{ cluster }} auth import -i /etc/ceph/{{ cluster }}.{{ item.0.name }}.keyring"
+  with_together:
+    - "{{ client_keys }}"
+    - "{{ client_keys_exist.results }}"
+  when: item.1.rc != 0
+
+- name: get key for already created user(s)
+  command: "{{ docker_exec_cmd }} ceph --cluster {{ cluster }} auth get-key {{ item.name }}"
+  register: client_key_registered
+  with_items:
+    - "{{ client_keys }}"
+
+- name: debug3
+  debug:
+    msg: "{{ client_key_registered }}"
+
+- name: clear client_keys variable
+  set_fact:
+    client_keys: []
+
+- name: update user key variable
+  set_fact:
+    client_keys: "{{ client_keys|default([]) + [{'name': item.item.name, 'key': item.stdout, 'mon_cap': item.item.mon_cap, 'osd_cap': item.item.osd_cap}] }}"
+  with_items: "{{ client_key_registered.results }}"

@@ -358,7 +358,6 @@ handler_health_osd_check: true
 #
 ceph_conf_overrides: {}
 
-
 #############
 # OS TUNING #
 #############

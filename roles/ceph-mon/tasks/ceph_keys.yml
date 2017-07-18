@@ -92,6 +92,12 @@
     - ceph_conf_overrides.global.osd_pool_default_pg_num is defined
     - rbd_pool_exist.rc != 0
 
+
+- include: user_config.yml
+  when:
+    - user_config
+    - inventory_hostname == groups[mon_group_name] | last
+
 - include: openstack_config.yml
   when:
     - openstack_config
