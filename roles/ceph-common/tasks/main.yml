@@ -1,4 +1,8 @@
 ---
+- name: include global_common variables
+  include_vars:
+    file: 'global_common.yml'
+
 - include: ./checks/check_system.yml
 - include: ./checks/check_mandatory_vars.yml
 

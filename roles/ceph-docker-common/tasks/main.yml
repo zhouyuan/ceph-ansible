@@ -1,4 +1,8 @@
 ---
+- name: include global_common variables
+  include_vars:
+    file: 'global_common.yml'
+
 - include: system_checks.yml
 
 - name: check if it is atomic host
